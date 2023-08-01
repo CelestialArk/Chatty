@@ -2,7 +2,16 @@
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    extend: {},
+    fontFamily: {
+      "rubik-medium": "Rubik-Medium",
+      "rubik-light": "Rubik-Light",
+      "rubik-regular": "Rubik-Regular",
+    },
+    extend: {
+      colors: {
+        primary: "#4d53f6",
+      },
+    },
   },
-  plugins: [],
+  plugins: [require("daisyui")],
 };
