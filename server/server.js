@@ -2,6 +2,8 @@ const express = require("express");
 
 const dotenv = require("dotenv").config();
 
+const cors = require("cors");
+
 const mongoose = require("mongoose");
 
 const userRoute = require("./routes/userRoute");
@@ -9,6 +11,12 @@ const userRoute = require("./routes/userRoute");
 const app = express();
 
 app.use(express.json());
+
+app.use(
+  cors({
+    origin: process.env.ORIGIN,
+  })
+);
 
 app.use((req, res, next) => {
   console.log(req.method, req.path);
