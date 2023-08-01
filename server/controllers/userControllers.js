@@ -57,14 +57,14 @@ const userSignin = async (req, res) => {
     const { email, password } = req.body;
     if (!email || !password)
       return res
-        .status(400)
+        .status(200)
         .json({ message: "Please provide the necessary information." });
     const user = await userModel.findOne({ email: email });
-    if (!user) return res.status(404).json({ message: "User doesn't exist." });
+    if (!user) return res.status(200).json({ message: "User doesn't exist." });
     bcrypt.compare(password, user.password, (err, result) => {
       if (err) throw err;
       if (!result)
-        return res.status(403).json({ message: "Password is incorrect." });
+        return res.status(200).json({ message: "Password is incorrect." });
       const token = jwt.sign(
         {
           firstname: user.firstname,
