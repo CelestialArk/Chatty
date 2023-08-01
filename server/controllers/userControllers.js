@@ -52,6 +52,44 @@ const userSignup = (req, res) => {
   }
 };
 
+const userSignin = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    if (!email || !password)
+      return res
+        .status(400)
+        .json({ message: "Please provide the necessary information." });
+    const user = await userModel.findOne({ email: email });
+    if (!user) return res.status(404).json({ message: "User doesn't exist." });
+    bcrypt.compare(password, user.password, (err, result) => {
+      if (err) throw err;
+      if (!result)
+        return res.status(403).json({ message: "Password is incorrect." });
+      const token = jwt.sign(
+        {
+          firstname: user.firstname,
+          lastname: user.lastname,
+          email: user.email,
+          username: user.username,
+        },
+        process.env.SECRET
+      );
+
+      return res
+        .cookie("access_token", token)
+        .status(200)
+        .json({ message: "Signed in successfully." });
+    });
+  } catch (err) {
+    console.log(
+      "Something went wrong while signing in the user : " + err.message
+    );
+  }
+};
+
+const userCheck = () => {};
+
 module.exports = {
   userSignup,
+  userSignin,
 };
