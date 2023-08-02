@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { logged } from "../context/LogContext";
 import axios from "axios";
-import { users } from "../context/UsersContext";
 import UsersList from "../components/UsersList";
 import logo from "./assets/display.png";
 function Chat() {
@@ -21,7 +20,7 @@ function Chat() {
     if (data.decoded) setUser(data.decoded);
   }, [data]);
   return (
-    <div className="h-screen w-full bg-white">
+    <div className="h-screen w-full bg-gray-200">
       <div className="navbar bg-info shadow-xl">
         <div className="flex-1">
           <span className="flex mx-3 font-rubik-medium font-bold text-white">
@@ -49,9 +48,12 @@ function Chat() {
           </button>
         </div>
       </div>
-      <UsersList />
-      <div className="flex justify-content-center">
-        <div className="m-auto text-base-200 font-rubik-regular">Chat</div>
+      <div className="w-full h-5/6 flex ">
+        <UsersList />
+        <div className="w-full flex items-end bg-gray-200">
+          <input className="input input-primary w-full bg-white mx-3" />
+          <button className="btn btn-primary mr-2 rounded-xl">Send</button>
+        </div>
       </div>
     </div>
   );
