@@ -78,7 +78,7 @@ const userSignin = async (req, res) => {
       return res
         .cookie("access_token", token)
         .status(200)
-        .json({ message: "Signed in successfully." });
+        .json({ message: "Signed in successfully.", state: true });
     });
   } catch (err) {
     console.log(
@@ -87,9 +87,32 @@ const userSignin = async (req, res) => {
   }
 };
 
-const userCheck = () => {};
+const userCheck = (req, res) => {
+  if (!req.cookies.access_token)
+    return res
+      .status(200)
+      .json({ message: "User not connected", state: false });
+  const token = req.cookies.access_token;
+  const decoded = jwt.verify(token, process.env.SECRET);
+  return res.status(200).json({
+    message: "User connected using cookies",
+    decoded: decoded,
+    state: true,
+  });
+};
+
+const userCheckout = async (req, res) => {
+  if (req.cookies.access_token) {
+    return res
+      .clearCookie("access_token")
+      .status(200)
+      .json({ message: "Disconnected" });
+  }
+};
 
 module.exports = {
   userSignup,
   userSignin,
+  userCheck,
+  userCheckout,
 };

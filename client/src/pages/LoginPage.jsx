@@ -1,8 +1,10 @@
 import { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function LoginPage() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const login = async () => {
@@ -15,6 +17,10 @@ function LoginPage() {
       },
     });
     alert(response.data.message);
+    if (response.data.state) {
+      navigate("/");
+      window.location.reload(false);
+    }
   };
   return (
     <div className="flex justify-content-center h-screen w-full bg-gradient-to-r from-primary to-info">
