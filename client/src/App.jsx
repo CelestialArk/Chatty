@@ -9,13 +9,10 @@ import { useContext, useEffect } from "react";
 
 function App() {
   const isLogged = useContext(logged);
-  useEffect(() => {
-    console.log(isLogged);
-  }, [isLogged]);
   return (
     <>
       <BrowserRouter>
-        {isLogged ? (
+        {isLogged.state ? (
           <Routes>
             <Route path="/" element={<Chat />} />
           </Routes>

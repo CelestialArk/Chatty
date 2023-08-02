@@ -5,7 +5,10 @@ import axios from "axios";
 export const logged = createContext();
 
 export default function LogContext({ children }) {
-  const [isLogged, setIsLogged] = useState();
+  const [isLogged, setIsLogged] = useState({
+    message: "Nothign yet",
+    state: false,
+  });
   useEffect(() => {
     const check = async () => {
       const response = await axios({
@@ -13,11 +16,11 @@ export default function LogContext({ children }) {
         url: "/api/user/check",
         withCredentials: true,
       });
-      setIsLogged(response.data.state);
+      setIsLogged(response.data);
     };
 
     check();
-  });
+  }, []);
 
   return <logged.Provider value={isLogged}>{children}</logged.Provider>;
 }
