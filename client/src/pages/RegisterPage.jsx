@@ -1,6 +1,36 @@
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function RegisterPage() {
+  const navigate = useNavigate();
+  const [firstname, setFirstname] = useState();
+  const [lastname, setLastname] = useState();
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
+  const [username, setUsername] = useState();
+
+  const register = async () => {
+    const response = await axios({
+      method: "post",
+      url: "/api/user/signup",
+      data: {
+        firstname: firstname,
+        lastname: lastname,
+        username: username,
+        email: email,
+        password: password,
+      },
+      withCredentials: true,
+    });
+    alert(response.data.message);
+    if (response.data.state) {
+      navigate("/");
+      window.location.reload(false);
+    }
+  };
+
   return (
     <div className="h-screen bg-gradient-to-r from-primary to-info">
       <div className="flex justify-content-center h-full">
@@ -20,6 +50,9 @@ function RegisterPage() {
                   <input
                     className="input input-info w-full bg-white mr-3 placeholder:font-rubik-light"
                     placeholder="Firstname"
+                    onChange={(event) => {
+                      setFirstname(event.target.value);
+                    }}
                   />
                 </div>
                 <div>
@@ -31,6 +64,9 @@ function RegisterPage() {
                   <input
                     className="input input-info w-full ml-3 bg-white placeholder:font-rubik-light"
                     placeholder="Lastname"
+                    onChange={(event) => {
+                      setLastname(event.target.value);
+                    }}
                   />
                 </div>
               </div>
@@ -44,6 +80,9 @@ function RegisterPage() {
                   <input
                     className="input input-info bg-white w-full placeholder:font-rubik-light"
                     placeholder="Username"
+                    onChange={(event) => {
+                      setUsername(event.target.value);
+                    }}
                   />
                 </div>
                 <div className="w-2/3">
@@ -55,6 +94,9 @@ function RegisterPage() {
                   <input
                     className="input input-info w-full bg-white placeholder:font-rubik-light"
                     placeholder="Email"
+                    onChange={(event) => {
+                      setEmail(event.target.value);
+                    }}
                   />
                 </div>
               </div>
@@ -69,6 +111,9 @@ function RegisterPage() {
                     type="password"
                     className="input input-info bg-white placeholder:font-rubik-light"
                     placeholder="Password"
+                    onChange={(event) => {
+                      setPassword(event.target.value);
+                    }}
                   />
                 </div>
                 <div className="ml-1 w-full">
@@ -85,7 +130,12 @@ function RegisterPage() {
                 </div>
               </div>
               <div className="mt-3">
-                <button className="btn btn-info font-rubik-regular w-full text-white">
+                <button
+                  className="btn btn-info font-rubik-regular w-full text-white"
+                  onClick={() => {
+                    register();
+                  }}
+                >
                   Sign Up
                 </button>
                 <div className="mt-3">

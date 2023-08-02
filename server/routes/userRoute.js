@@ -4,6 +4,7 @@ const {
   userSignin,
   userCheck,
   userCheckout,
+  getUsers,
 } = require("../controllers/userControllers");
 
 const route = express.Router();
@@ -15,5 +16,7 @@ route.post("/signin", userSignin);
 route.get("/check", userCheck);
 
 route.get("/checkout", userCheckout);
+
+route.get("/getAll", getUsers);
 
 module.exports = route;

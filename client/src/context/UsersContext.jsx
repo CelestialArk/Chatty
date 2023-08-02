@@ -1,5 +1,6 @@
 import axios from "axios";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
+import { logged } from "./LogContext";
 
 export const users = createContext();
 
@@ -9,12 +10,14 @@ export default function UsersContext({ children }) {
     const getList = async () => {
       const response = await axios({
         method: "get",
-        url: "",
+        url: "/api/user/getAll",
+        withCredentials: true,
       });
+      setList(response.data.users);
     };
 
     getList();
   }, []);
 
-  return <users.Provider>{children}</users.Provider>;
+  return <users.Provider value={list}>{children}</users.Provider>;
 }

@@ -1,6 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import { logged } from "../context/LogContext";
 import axios from "axios";
+import { users } from "../context/UsersContext";
+import UsersList from "../components/UsersList";
 
 function Chat() {
   const data = useContext(logged);
@@ -40,6 +42,7 @@ function Chat() {
           </button>
         </div>
       </div>
+      <UsersList />
       <div className="flex justify-content-center">
         <div className="m-auto text-base-200 font-rubik-regular">Chat</div>
       </div>

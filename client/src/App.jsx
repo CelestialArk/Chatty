@@ -6,6 +6,7 @@ import LoginPage from "./pages/LoginPage";
 import { logged } from "./context/LogContext";
 import Chat from "./pages/Chat";
 import { useContext, useEffect } from "react";
+import UsersContext from "./context/UsersContext";
 
 function App() {
   const isLogged = useContext(logged);
@@ -14,7 +15,14 @@ function App() {
       <BrowserRouter>
         {isLogged.state ? (
           <Routes>
-            <Route path="/" element={<Chat />} />
+            <Route
+              path="/"
+              element={
+                <UsersContext>
+                  <Chat />
+                </UsersContext>
+              }
+            />
           </Routes>
         ) : (
           <Routes>
