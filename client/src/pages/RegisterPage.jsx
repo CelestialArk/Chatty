@@ -10,8 +10,12 @@ function RegisterPage() {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [username, setUsername] = useState();
+  const [verifyPassword, setVerifyPassword] = useState();
 
   const register = async () => {
+    if (password !== verifyPassword) {
+      return alert("Passwords do not match");
+    }
     const response = await axios({
       method: "post",
       url: "/api/user/signup",
@@ -126,6 +130,9 @@ function RegisterPage() {
                     type="password"
                     className="input input-info bg-white placeholder:font-rubik-light"
                     placeholder="Verify Password"
+                    onChange={(event) => {
+                      setVerifyPassword(event.target.value);
+                    }}
                   />
                 </div>
               </div>

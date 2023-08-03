@@ -13,7 +13,7 @@ function UsersList() {
     </div>
   ));
   return (
-    <div className="h-full w-1/5 bg-white">
+    <div className="h-full w-1/5 bg-white overflow-auto">
       <div className="p-6 text-center font-rubik-medium bg-primary text-white border-b-4 ">
         Users
       </div>

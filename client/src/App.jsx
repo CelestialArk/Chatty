@@ -4,7 +4,7 @@ import RegisterPage from "./pages/RegisterPage";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import { logged } from "./context/LogContext";
-import Chat from "./pages/Chat";
+import ChatPage from "./pages/ChatPage";
 import { useContext, useEffect } from "react";
 import UsersContext from "./context/UsersContext";
 
@@ -19,7 +19,7 @@ function App() {
               path="/"
               element={
                 <UsersContext>
-                  <Chat />
+                  <ChatPage />
                 </UsersContext>
               }
             />
