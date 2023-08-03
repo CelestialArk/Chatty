@@ -10,6 +10,8 @@ const mongoose = require("mongoose");
 
 const userRoute = require("./routes/userRoute");
 
+const chatRoute = require("./routes/chatRoute");
+
 const app = express();
 
 app.use(express.json());
@@ -28,6 +30,8 @@ app.use((req, res, next) => {
 });
 
 app.use("/api/user", userRoute);
+
+app.use("/api/chat", chatRoute);
 
 mongoose
   .connect(process.env.MONGO_URL)
