@@ -26,6 +26,16 @@ const userSchema = new Schema(
       required: true,
       unique: true,
     },
+    chats: [
+      {
+        type: mongoose.Types.ObjectId,
+      },
+    ],
+    requests: [
+      {
+        sender: mongoose.Types.ObjectId,
+      },
+    ],
   },
   { timestamps: true }
 );

@@ -12,7 +12,6 @@ const chatSchema = new Schema(
         },
         receiver: {
           type: mongoose.Types.ObjectId,
-          required: true,
         },
         content: {
           type: "String",
