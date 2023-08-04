@@ -12,6 +12,8 @@ const userRoute = require("./routes/userRoute");
 
 const chatRoute = require("./routes/chatRoute");
 
+const requestRoute = require("./routes/requestRoute");
+
 const app = express();
 
 app.use(express.json());
@@ -32,6 +34,8 @@ app.use((req, res, next) => {
 app.use("/api/user", userRoute);
 
 app.use("/api/chat", chatRoute);
+
+app.use("/api/request", requestRoute);
 
 mongoose
   .connect(process.env.MONGO_URL)
