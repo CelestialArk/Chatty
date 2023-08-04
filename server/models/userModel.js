@@ -31,11 +31,6 @@ const userSchema = new Schema(
         type: mongoose.Types.ObjectId,
       },
     ],
-    requests: [
-      {
-        sender: mongoose.Types.ObjectId,
-      },
-    ],
   },
   { timestamps: true }
 );

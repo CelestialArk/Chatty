@@ -15,19 +15,23 @@ const sendRequest = async (req, res) => {
       receiver: receiver._id,
       sender: decoded.id,
     });
-    receiver.updateOne({
-      $push: {
-        requests: {
-          sender: decoded.id,
+    const updated = await userModel.findOneAndUpdate(
+      { _id: receiver._id },
+      {
+        $push: {
+          requests: {
+            request: request._id,
+          },
         },
-      },
-    });
-    receiver.save();
+      }
+    );
     if (!request)
       return res.status(400).json({ message: "Request couldn't be sent." });
-    return res
-      .status(200)
-      .json({ message: "Reqest sent successfully.", request: request });
+    return res.status(200).json({
+      message: "Request sent successfully.",
+      request: request,
+      updated: updated,
+    });
   } catch (err) {
     return res.status(400).json({
       message:
@@ -37,6 +41,29 @@ const sendRequest = async (req, res) => {
   }
 };
 
+const replyRequest = async (req, res) => {
+  const { id, reply } = req.body;
+  if (reply) {
+    const request = await requestModel.findOneAndDelete({ _id: id });
+    const sender = await userModel.findOneAndUpdate()
+  }
+};
+
+const getRequests = async (req, res) => {
+  const token = req.cookies.access_token;
+  if (!token) return res.status(404).json({ message: "not connected." });
+  const decoded = jwt.verify(token, process.env.SECRET);
+  const requests = await requestModel.findOne({ receiver: decoded.id });
+  if (!requests)
+    return res.status(200).json({
+      message: "No requests for now",
+    });
+  return res
+    .status(200)
+    .json({ message: "Here are all the requests", requests: requests });
+};
+
 module.exports = {
   sendRequest,
+  getRequests,
 };
