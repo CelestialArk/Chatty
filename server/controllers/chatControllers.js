@@ -2,20 +2,16 @@ const chatModel = require("../models/chatModel");
 
 const jwt = require("jsonwebtoken");
 
-const addChat = async (req, res) => {
+const addChat = async (sender, receiver) => {
   try {
-    const { sender, receiver } = req.body;
     const chat = await chatModel.create({
       messages: [
         { sender: sender, receiver: receiver, content: "Hello world" },
       ],
     });
-    if (!chat)
-      return res.status(400).json({ message: "Couldn't create the chat." });
+    if (!chat) return null;
 
-    return res
-      .status(200)
-      .json({ message: "Chat created successfully.", chat: chat });
+    return chat;
   } catch (err) {
     return res
       .status(400)

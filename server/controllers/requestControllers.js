@@ -1,6 +1,8 @@
+const chatModel = require("../models/chatModel");
 const requestModel = require("../models/requestModel");
 const userModel = require("../models/userModel");
 const jwt = require("jsonwebtoken");
+const { addChat } = require("./chatControllers");
 
 const sendRequest = async (req, res) => {
   try {
@@ -42,10 +44,19 @@ const sendRequest = async (req, res) => {
 };
 
 const replyRequest = async (req, res) => {
-  const { id, reply } = req.body;
-  if (reply) {
-    const request = await requestModel.findOneAndDelete({ _id: id });
-    const sender = await userModel.findOneAndUpdate()
+  try {
+    const { id, reply } = req.body;
+    if (reply) {
+      const request = await requestModel.findOneAndDelete({ _id: id });
+      const chat = addChat(request.sender, request.receiver);
+      if (!chat)
+        return res.status(400).json({ message: "Couldn't create the chat" });
+      return res.status(200).json({ message: "Message created successfully" });
+    }
+  } catch (err) {
+    return res.status(400).json({
+      message: "Something went wrong while trying to reply : " + err.message,
+    });
   }
 };
 
@@ -66,4 +77,5 @@ const getRequests = async (req, res) => {
 module.exports = {
   sendRequest,
   getRequests,
+  replyRequest,
 };
