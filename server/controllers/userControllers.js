@@ -136,21 +136,14 @@ const getUsers = async (req, res) => {
   try {
     if (!req.cookies.access_token)
       return res.status(404).json({ message: "Not connected." });
-    const decoded = req.cookies.access_token;
-    const user = jwt.verify(decoded, process.env.SECRET);
-    const users = await userModel.find({
-      _id: {
-        $ne: user.id,
-      },
-    });
-
-    if (!users)
+    const token = req.cookies.access_token;
+    const decoded = jwt.verify(token, process.env.SECRET);
+    const user = await userModel.findById(decoded.id);
+    if (!user)
       return res
         .status(200)
-        .json({ message: "No users for now.", users: null });
-    return res
-      .status(200)
-      .json({ message: "Here are all the users", users: users });
+        .json({ message: "Coudln't find the user.", users: null });
+    const users = await userModel.find(user.friends);
   } catch (err) {
     return res.status(400).json({
       message:

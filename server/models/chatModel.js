@@ -4,6 +4,12 @@ const Schema = mongoose.Schema;
 
 const chatSchema = new Schema(
   {
+    participants: [
+      {
+        participant: { type: mongoose.Types.ObjectId, required: true },
+      },
+    ],
+
     messages: [
       {
         sender: {
@@ -12,6 +18,7 @@ const chatSchema = new Schema(
         },
         receiver: {
           type: mongoose.Types.ObjectId,
+          required: true,
         },
         content: {
           type: "String",

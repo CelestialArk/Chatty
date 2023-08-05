@@ -13,6 +13,12 @@ const addChat = async (sender, receiver) => {
           content: "You are now connected.",
         },
       ],
+      participants: [
+        {
+          participant: sender,
+        },
+        { participant: receiver },
+      ],
     });
     await userModel.findOneAndUpdate(
       { _id: sender },
