@@ -41,7 +41,7 @@ const replyRequest = async (req, res) => {
         return res.status(400).json({ message: "Couldn't create the chat" });
       return res.status(200).json({ message: "Chat created successfully" });
     }
-    const request = await requestModel.findOneAndDelete({ _id: id });
+    await requestModel.findOneAndDelete({ _id: id });
     return res.status(200).json({ message: "Reply to request: refused" });
   } catch (err) {
     return res.status(400).json({

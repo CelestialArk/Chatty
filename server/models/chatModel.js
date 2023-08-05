@@ -2,11 +2,17 @@ const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
+const userModel = require("./userModel");
+
 const chatSchema = new Schema(
   {
     participants: [
       {
-        participant: { type: mongoose.Types.ObjectId, required: true },
+        participant: {
+          type: mongoose.Types.ObjectId,
+          required: true,
+          ref: "User",
+        },
       },
     ],
 
@@ -15,10 +21,12 @@ const chatSchema = new Schema(
         sender: {
           type: mongoose.Types.ObjectId,
           required: true,
+          ref: "User",
         },
         receiver: {
           type: mongoose.Types.ObjectId,
           required: true,
+          ref: "User",
         },
         content: {
           type: "String",

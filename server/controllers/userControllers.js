@@ -138,12 +138,19 @@ const getUsers = async (req, res) => {
       return res.status(404).json({ message: "Not connected." });
     const token = req.cookies.access_token;
     const decoded = jwt.verify(token, process.env.SECRET);
-    const user = await userModel.findById(decoded.id);
-    if (!user)
-      return res
-        .status(200)
-        .json({ message: "Coudln't find the user.", users: null });
-    const users = await userModel.find(user.friends);
+    const users = await userModel
+      .find({
+        participant: {
+          $ne: decoded.id,
+        },
+      })
+      .populate({ path: "participant", strictPopulate: false });
+
+    if (!users)
+      return res.status(200).json({ message: "No user for now.", users: null });
+    return res
+      .status(200)
+      .json({ message: "Here are all the users", users: users });
   } catch (err) {
     return res.status(400).json({
       message:
