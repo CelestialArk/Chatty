@@ -21,7 +21,6 @@ const sendRequest = async (req, res) => {
     return res.status(200).json({
       message: "Request sent successfully.",
       request: request,
-      updated: updated,
     });
   } catch (err) {
     return res.status(400).json({

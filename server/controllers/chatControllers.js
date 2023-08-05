@@ -1,6 +1,7 @@
 const chatModel = require("../models/chatModel");
 
 const jwt = require("jsonwebtoken");
+const userModel = require("../models/userModel");
 
 const addChat = async (sender, receiver) => {
   try {
@@ -13,13 +14,29 @@ const addChat = async (sender, receiver) => {
         },
       ],
     });
+    await userModel.findOneAndUpdate(
+      { _id: sender },
+      {
+        $push: {
+          chats: chat._id,
+        },
+      }
+    );
+    await userModel.findOneAndUpdate(
+      { _id: receiver },
+      {
+        $push: {
+          chats: chat._id,
+        },
+      }
+    );
     if (!chat) return null;
 
     return chat;
   } catch (err) {
-    return res
-      .status(400)
-      .json("Something went wrong while trying to add a chat : " + err.message);
+    return console.log(
+      "Something went wrong while trying to add a chat : " + err.message
+    );
   }
 };
 
