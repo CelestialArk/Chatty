@@ -1,4 +1,3 @@
-const chatModel = require("../models/chatModel");
 const requestModel = require("../models/requestModel");
 const userModel = require("../models/userModel");
 const jwt = require("jsonwebtoken");
@@ -17,16 +16,6 @@ const sendRequest = async (req, res) => {
       receiver: receiver._id,
       sender: decoded.id,
     });
-    const updated = await userModel.findOneAndUpdate(
-      { _id: receiver._id },
-      {
-        $push: {
-          requests: {
-            request: request._id,
-          },
-        },
-      }
-    );
     if (!request)
       return res.status(400).json({ message: "Request couldn't be sent." });
     return res.status(200).json({
@@ -51,8 +40,10 @@ const replyRequest = async (req, res) => {
       const chat = addChat(request.sender, request.receiver);
       if (!chat)
         return res.status(400).json({ message: "Couldn't create the chat" });
-      return res.status(200).json({ message: "Message created successfully" });
+      return res.status(200).json({ message: "Chat created successfully" });
     }
+    const request = await requestModel.findOneAndDelete({ _id: id });
+    return res.status(200).json({ message: "Reply to request: refused" });
   } catch (err) {
     return res.status(400).json({
       message: "Something went wrong while trying to reply : " + err.message,

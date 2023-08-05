@@ -6,7 +6,11 @@ const addChat = async (sender, receiver) => {
   try {
     const chat = await chatModel.create({
       messages: [
-        { sender: sender, receiver: receiver, content: "Hello world" },
+        {
+          sender: sender,
+          receiver: receiver,
+          content: "You are now connected.",
+        },
       ],
     });
     if (!chat) return null;
