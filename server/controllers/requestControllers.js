@@ -37,6 +37,28 @@ const replyRequest = async (req, res) => {
     if (reply) {
       const request = await requestModel.findOneAndDelete({ _id: id });
       const chat = addChat(request.sender, request.receiver);
+      await userModel.findOneAndUpdate(
+        { _id: request.sender },
+        {
+          $push: {
+            friends: {
+              friend: request.receiver,
+              chat: chat._id,
+            },
+          },
+        }
+      );
+      await userModel.findOneAndUpdate(
+        { _id: request.receiver },
+        {
+          $push: {
+            friends: {
+              friend: request.sender,
+              chat: chat._id,
+            },
+          },
+        }
+      );
       if (!chat)
         return res.status(400).json({ message: "Couldn't create the chat" });
       return res.status(200).json({ message: "Chat created successfully" });

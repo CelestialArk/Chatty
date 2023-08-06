@@ -32,6 +32,18 @@ const userSchema = new Schema(
         ref: "Chat",
       },
     ],
+    friends: [
+      {
+        friend: {
+          type: mongoose.Types.ObjectId,
+          ref: "User",
+        },
+        chat: {
+          type: mongoose.Types.ObjectId,
+          ref: "Chat",
+        },
+      },
+    ],
   },
   { timestamps: true }
 );

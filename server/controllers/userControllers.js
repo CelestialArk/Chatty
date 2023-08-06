@@ -139,14 +139,11 @@ const getUsers = async (req, res) => {
       return res.status(404).json({ message: "Not connected." });
     const token = req.cookies.access_token;
     const decoded = jwt.verify(token, process.env.SECRET);
-    const chats = await chatModel.find({
-      "participants.participant": decoded.id,
+    return res.status(200).json({
+      message: "Here are all the chats",
+      chats: chats,
+      user: chats[0].participants[0].participant,
     });
-    if (JSON.stringify(chats) === JSON.stringify([]))
-      return res.status(200).json({ message: "No user for now.", chats: null });
-    return res
-      .status(200)
-      .json({ message: "Here are all the chats", chats: chats });
   } catch (err) {
     return res.status(400).json({
       message:
