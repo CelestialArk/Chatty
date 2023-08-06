@@ -3,6 +3,7 @@ const userModel = require("../models/userModel");
 const bcrypt = require("bcrypt");
 
 const jwt = require("jsonwebtoken");
+const chatModel = require("../models/chatModel");
 
 const userSignup = (req, res) => {
   try {
@@ -138,19 +139,14 @@ const getUsers = async (req, res) => {
       return res.status(404).json({ message: "Not connected." });
     const token = req.cookies.access_token;
     const decoded = jwt.verify(token, process.env.SECRET);
-    const users = await userModel
-      .find({
-        participant: {
-          $ne: decoded.id,
-        },
-      })
-      .populate({ path: "participant", strictPopulate: false });
-
-    if (!users)
-      return res.status(200).json({ message: "No user for now.", users: null });
+    const chats = await chatModel.find({
+      "participants.participant": decoded.id,
+    });
+    if (JSON.stringify(chats) === JSON.stringify([]))
+      return res.status(200).json({ message: "No user for now.", chats: null });
     return res
       .status(200)
-      .json({ message: "Here are all the users", users: users });
+      .json({ message: "Here are all the chats", chats: chats });
   } catch (err) {
     return res.status(400).json({
       message:

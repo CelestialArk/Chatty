@@ -7,10 +7,12 @@ const requestSchema = new Schema(
     sender: {
       type: mongoose.Types.ObjectId,
       required: true,
+      ref: "User",
     },
     receiver: {
       type: mongoose.Types.ObjectId,
       required: true,
+      ref: "User",
     },
   },
   { timestamps: true }

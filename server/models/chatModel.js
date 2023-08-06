@@ -2,8 +2,6 @@ const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
-const userModel = require("./userModel");
-
 const chatSchema = new Schema(
   {
     participants: [
