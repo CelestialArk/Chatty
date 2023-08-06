@@ -26,21 +26,17 @@ const userSchema = new Schema(
       required: true,
       unique: true,
     },
-    chats: [
-      {
-        type: mongoose.Types.ObjectId,
-        ref: "Chat",
-      },
-    ],
     friends: [
       {
         friend: {
           type: mongoose.Types.ObjectId,
           ref: "User",
+          unique: true,
         },
         chat: {
           type: mongoose.Types.ObjectId,
           ref: "Chat",
+          unique: true,
         },
       },
     ],

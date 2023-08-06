@@ -36,7 +36,7 @@ const replyRequest = async (req, res) => {
     const { id, reply } = req.body;
     if (reply) {
       const request = await requestModel.findOneAndDelete({ _id: id });
-      const chat = addChat(request.sender, request.receiver);
+      const chat = await addChat(request.sender, request.receiver);
       await userModel.findOneAndUpdate(
         { _id: request.sender },
         {
