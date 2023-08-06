@@ -9,7 +9,7 @@ const userSignup = (req, res) => {
   try {
     const { firstname, lastname, email, password, username } = req.body;
     if (!firstname || !lastname || !username || !email || !password) {
-      return res.status(403).json({
+      return res.status(200).json({
         message: "Please provide all the necessary information.",
         state: false,
       });
@@ -139,7 +139,9 @@ const getUsers = async (req, res) => {
       return res.status(404).json({ message: "Not connected." });
     const token = req.cookies.access_token;
     const decoded = jwt.verify(token, process.env.SECRET);
-    const user = await userModel.findById(decoded.id);
+    const user = await userModel
+      .findById(decoded.id)
+      .populate({ path: "friends.friend", strictPopulate: false });
     return res.status(200).json({
       message: "Here are all the chats",
       users: user.friends,

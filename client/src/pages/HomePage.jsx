@@ -1,4 +1,4 @@
-import logo from "./assets/display.png";
+import Logo from "./assets/Logo.png";
 
 import { Link } from "react-router-dom";
 
@@ -9,7 +9,7 @@ function HomePage() {
         <div className="card lg:card-side bg-base-200 shadow-xl bg-white grid-cols-2">
           <div className="flex p-4 bg-gray-100 rounded-xl">
             <div className="m-auto">
-              <img src={logo} className="place-self-center" />
+              <img src={Logo} className="place-self-center" />
             </div>
             <div className="flex justify-content-center">
               <div className="m-auto ">
