@@ -10,6 +10,20 @@ function ChatPage() {
   const requests = useContext(request);
   const data = useContext(logged);
   const [user, setUser] = useState();
+  const [search, setSeearch] = useState("");
+
+  const searchUsers = async () => {
+    if (search === "") return alert("Please enter the Username of the user");
+    const response = await axios({
+      method: "post",
+      url: "/api/request/send",
+      data: {
+        receiverName: search,
+      },
+    });
+
+    alert(response.data.message);
+  };
 
   const listItems = requests.map((item) => (
     <ul
@@ -60,6 +74,7 @@ function ChatPage() {
       },
     });
     alert(response.data.message);
+    window.location.reload(false);
   };
 
   const logout = async () => {
@@ -70,10 +85,6 @@ function ChatPage() {
     alert(response.data.message);
     window.location.reload(false);
   };
-
-  useEffect(() => {
-    console.log(requests);
-  }, [requests]);
 
   useEffect(() => {
     if (data.decoded) setUser(data.decoded);
@@ -97,7 +108,20 @@ function ChatPage() {
           </span>
         </div>
         <div className="flex-none">
-          <button className="btn btn-ghost btn-circle">
+          <input
+            type="text"
+            placeholder="Search for Users"
+            className="input input-bordered input-primary bg-white w-full max-w-xs"
+            onChange={(event) => {
+              setSeearch(event.target.value);
+            }}
+          />
+          <button
+            className="btn btn-ghost btn-circle"
+            onClick={() => {
+              searchUsers();
+            }}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="h-5 w-5 text-white"
@@ -113,6 +137,7 @@ function ChatPage() {
               />
             </svg>
           </button>
+
           <div className="dropdown dropdown-end">
             <button className="btn btn-ghost btn-circle">
               <div className="indicator">
@@ -130,9 +155,9 @@ function ChatPage() {
                     d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
                   />
                 </svg>
-                {requests === [] ? (
+                {JSON.stringify(requests) === JSON.stringify([]) ? null : (
                   <span className="badge badge-xs badge-primary indicator-item"></span>
-                ) : null}
+                )}
               </div>
             </button>
             {listItems}

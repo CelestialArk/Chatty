@@ -2,6 +2,7 @@ const requestModel = require("../models/requestModel");
 const userModel = require("../models/userModel");
 const jwt = require("jsonwebtoken");
 const { addChat } = require("./chatControllers");
+const chatModel = require("../models/chatModel");
 
 const sendRequest = async (req, res) => {
   try {
@@ -12,6 +13,24 @@ const sendRequest = async (req, res) => {
     const receiver = await userModel.findOne({ username: receiverName });
     if (!receiver)
       return res.status(200).json({ message: "No such user exists." });
+    const chat = await chatModel
+      .find({
+        participants: {
+          $elemMatch: {
+            participant: decoded.id,
+          },
+        },
+      })
+      .and({
+        participants: {
+          $elemMatch: {
+            participant: receiver._id,
+          },
+        },
+      });
+    if (JSON.stringify(chat) !== JSON.stringify([]))
+      return res.status(200).json({ message: "User already a friend" });
+
     const request = await requestModel.create({
       receiver: receiver._id,
       sender: decoded.id,
