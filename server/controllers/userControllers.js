@@ -3,7 +3,6 @@ const userModel = require("../models/userModel");
 const bcrypt = require("bcrypt");
 
 const jwt = require("jsonwebtoken");
-const chatModel = require("../models/chatModel");
 
 const userSignup = (req, res) => {
   try {

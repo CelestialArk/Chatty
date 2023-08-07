@@ -7,6 +7,7 @@ import { logged } from "./context/LogContext";
 import ChatPage from "./pages/ChatPage";
 import { useContext, useEffect } from "react";
 import UsersContext from "./context/UsersContext";
+import RequestContext from "./context/RequestContext";
 
 function App() {
   const isLogged = useContext(logged);
@@ -19,7 +20,9 @@ function App() {
               path="/"
               element={
                 <UsersContext>
-                  <ChatPage />
+                  <RequestContext>
+                    <ChatPage />
+                  </RequestContext>
                 </UsersContext>
               }
             />

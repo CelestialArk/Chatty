@@ -31,12 +31,10 @@ const userSchema = new Schema(
         friend: {
           type: mongoose.Types.ObjectId,
           ref: "User",
-          unique: true,
         },
         chat: {
           type: mongoose.Types.ObjectId,
           ref: "Chat",
-          unique: true,
         },
       },
     ],
