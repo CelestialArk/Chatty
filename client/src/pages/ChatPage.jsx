@@ -12,15 +12,55 @@ function ChatPage() {
   const [user, setUser] = useState();
 
   const listItems = requests.map((item) => (
-    <div key={item._id}>
-      <span className="text-base-200 font-rubik-medium">
-        {item.sender.username}
-      </span>
-      <div className="card-actions">
-        <button className="btn btn-primary btn-block">View cart</button>
-      </div>
-    </div>
+    <ul
+      tabIndex={0}
+      className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-white rounded-box"
+      key={item._id}
+    >
+      <li className="border-b-2 p-2">
+        <div className="w-full">
+          <div className="w-10 rounded-full">
+            <img src={display} />
+          </div>
+          <div className="font-rubik-medium">
+            <div className="text-base-200">
+              {item.sender.username}
+              <div className="flex">
+                <button
+                  className="btn btn-success m-2"
+                  onClick={() => {
+                    replyRequest(true, item._id);
+                  }}
+                >
+                  Accept
+                </button>
+                <button
+                  className="btn btn-error m-2"
+                  onClick={() => {
+                    replyRequest(false, item._id);
+                  }}
+                >
+                  Reject
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </li>
+    </ul>
   ));
+
+  const replyRequest = async (reply, id) => {
+    const response = await axios({
+      method: "post",
+      url: "/api/request/reply",
+      data: {
+        id: id,
+        reply: reply,
+      },
+    });
+    alert(response.data.message);
+  };
 
   const logout = async () => {
     const response = await axios({
@@ -90,22 +130,12 @@ function ChatPage() {
                     d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
                   />
                 </svg>
-                {requests ? (
+                {requests === [] ? (
                   <span className="badge badge-xs badge-primary indicator-item"></span>
                 ) : null}
               </div>
             </button>
-            <div
-              tabIndex={0}
-              className="mt-3 z-[1] card card-compact dropdown-content w-52 bg-white shadow-xl"
-            >
-              <div className="card-body">
-                <span className="font-bold text-lg text-base-200 font-rubik-regular">
-                  Requests
-                </span>
-                {listItems}
-              </div>
-            </div>
+            {listItems}
           </div>
           <div className="dropdown dropdown-end">
             <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
