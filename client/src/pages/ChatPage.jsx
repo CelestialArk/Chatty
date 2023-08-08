@@ -13,6 +13,7 @@ function ChatPage() {
   const data = useContext(logged);
   const [user, setUser] = useState();
   const [search, setSeearch] = useState("");
+  const [chat, setChat] = useState("");
 
   const sendMessage = () => {
     socket.emit("hello", "Hi!!");
@@ -20,6 +21,17 @@ function ChatPage() {
 
   const getChat = () => {
     socket.emit("getChat", 21);
+  };
+
+  useEffect(() => {
+    socket.on("gotChat", (message) => {
+      alert(message);
+    });
+  });
+
+  const handleChatChange = (data) => {
+    setChat(data);
+    alert(data);
   };
 
   const searchUsers = async () => {
@@ -199,7 +211,7 @@ function ChatPage() {
         </div>
       </div>
       <div className="w-full h-5/6 flex ">
-        <UsersList />
+        <UsersList changeChat={handleChatChange} />
         <div className="w-full h-full">
           <ChatRoom />
           <div className="w-full h-1/6 flex items-end bg-white">
@@ -207,7 +219,7 @@ function ChatPage() {
             <button
               className="btn btn-primary mr-2 rounded-xl px-4"
               onClick={() => {
-                sendMessage();
+                getChat();
               }}
             >
               Send

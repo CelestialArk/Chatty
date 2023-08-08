@@ -54,6 +54,10 @@ io.on("connection", (socket) => {
   socket.on("hello", (data) => {
     console.log(data);
   });
+  socket.on("getChat", (chat) => {
+    socket.join(chat);
+    socket.emit("gotChat", "Joined the chat : " + chat);
+  });
 });
 
 mongoose
