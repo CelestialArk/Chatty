@@ -6,11 +6,21 @@ import logo from "./assets/Logo.png";
 import display from "./assets/Display.png";
 import ChatRoom from "../components/ChatRoom";
 import { request } from "../context/RequestContext";
+import { socket } from "../chat/socket";
+
 function ChatPage() {
   const requests = useContext(request);
   const data = useContext(logged);
   const [user, setUser] = useState();
   const [search, setSeearch] = useState("");
+
+  const sendMessage = () => {
+    socket.emit("hello", "Hi!!");
+  };
+
+  const getChat = () => {
+    socket.emit("getChat", 21);
+  };
 
   const searchUsers = async () => {
     if (search === "") return alert("Please enter the Username of the user");
@@ -194,7 +204,12 @@ function ChatPage() {
           <ChatRoom />
           <div className="w-full h-1/6 flex items-end bg-white">
             <input className="input input-primary w-full bg-white mx-3" />
-            <button className="btn btn-primary mr-2 rounded-xl px-4">
+            <button
+              className="btn btn-primary mr-2 rounded-xl px-4"
+              onClick={() => {
+                sendMessage();
+              }}
+            >
               Send
             </button>
           </div>
