@@ -1,9 +1,32 @@
-import React from "react";
+import React, { useContext } from "react";
+import { logged } from "../context/LogContext";
 
-function ChatRoom() {
+function ChatRoom({ messages }) {
+  const user = useContext(logged);
+  const id = user.decoded.id;
+  const list = messages ? messages : [];
+  const messageList = list.map((message) =>
+    id === message.sender ? (
+      <div className="" key={message._id}>
+        <div className="chat chat-end">
+          <div className="chat-bubble bg-primary text-white">
+            {message.content}
+          </div>
+        </div>
+      </div>
+    ) : (
+      <div className="" key={message._id}>
+        <div className="chat chat-start">
+          <div className="chat-bubble bg-info text-white">
+            {message.content}
+          </div>
+        </div>
+      </div>
+    )
+  );
   return (
-    <div className="h-5/6 flex justify-content-center overflow-auto bg-gray-200 rounded-xl">
-      <div className="m-auto"></div>
+    <div className="h-5/6 overflow-auto bg-gray-200 rounded-xl">
+      {messageList}
     </div>
   );
 }

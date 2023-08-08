@@ -51,12 +51,9 @@ app.use("/api/chat", chatRoute);
 app.use("/api/request", requestRoute);
 
 io.on("connection", (socket) => {
-  socket.on("hello", (data) => {
-    console.log(data);
-  });
-  socket.on("getChat", (chat) => {
-    socket.join(chat);
-    socket.emit("gotChat", "Joined the chat : " + chat);
+  socket.on("getChat", (data) => {
+    socket.join(data);
+    socket.emit("gotChat", "Here is the chat : " + data);
   });
 });
 

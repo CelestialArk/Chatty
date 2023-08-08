@@ -6,7 +6,7 @@ export const logged = createContext();
 
 export default function LogContext({ children }) {
   const [isLogged, setIsLogged] = useState({
-    message: "Nothign yet",
+    message: "Nothing yet",
     state: false,
   });
   useEffect(() => {

@@ -13,25 +13,34 @@ function ChatPage() {
   const data = useContext(logged);
   const [user, setUser] = useState();
   const [search, setSeearch] = useState("");
-  const [chat, setChat] = useState("");
+  const [messages, setMessages] = useState([]);
+  const [message, setMessage] = useState();
+  const [chat, setChat] = useState();
+  const [current, setCurrent] = useState();
 
-  const sendMessage = () => {
-    socket.emit("hello", "Hi!!");
-  };
-
-  const getChat = () => {
-    socket.emit("getChat", 21);
-  };
-
-  useEffect(() => {
-    socket.on("gotChat", (message) => {
-      alert(message);
+  const sendMessage = async () => {
+    const response = await axios({
+      method: "post",
+      url: "api/chat/sendMessage",
+      data: {
+        id: chat,
+        content: message,
+        receiver: current,
+      },
     });
-  });
+  };
 
-  const handleChatChange = (data) => {
-    setChat(data);
-    alert(data);
+  const handleChatChange = async (chat, friend) => {
+    setChat(chat);
+    setCurrent(friend);
+    const response = await axios({
+      method: "post",
+      url: "/api/chat/getChat",
+      data: {
+        id: chat,
+      },
+    });
+    setMessages(response.data.chat.messages);
   };
 
   const searchUsers = async () => {
@@ -213,13 +222,18 @@ function ChatPage() {
       <div className="w-full h-5/6 flex ">
         <UsersList changeChat={handleChatChange} />
         <div className="w-full h-full">
-          <ChatRoom />
+          <ChatRoom messages={messages} />
           <div className="w-full h-1/6 flex items-end bg-white">
-            <input className="input input-primary w-full bg-white mx-3" />
+            <input
+              className="input input-primary w-full bg-white mx-3"
+              onChange={(event) => {
+                setMessage(event.target.value);
+              }}
+            />
             <button
               className="btn btn-primary mr-2 rounded-xl px-4"
               onClick={() => {
-                getChat();
+                sendMessage();
               }}
             >
               Send

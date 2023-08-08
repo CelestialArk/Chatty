@@ -46,30 +46,48 @@ const addChat = async (sender, receiver) => {
   }
 };
 
-const getChats = async (req, res) => {
+const getChat = async (req, res) => {
   try {
-    const token = req.cookies.access_token;
-    if (!token) return res.status(404).json({ message: "Not logged in" });
-    const decoded = jwt.verify(token, process.env.SECRET);
-    const chats = await chatModel
-      .find()
-      .or(
-        { messages: { sender: decoded.id } },
-        { messages: { receiver: decoded.id } }
-      );
-    if (!chats) return res.status(200).json({ message: "No chats for now." });
-    return res
-      .status(200)
-      .json({ message: "Here are all the chats :", chats: chats });
+    const { id } = req.body;
+    const chat = await chatModel.findById(id);
+    if (JSON.stringify(chat) === JSON.stringify([]))
+      return res.status(200).json({ message: "No chats for now." });
+    return res.status(200).json({ message: "Here is the chat :", chat: chat });
   } catch (err) {
     res.status(400).json({
+      message: "Something went wrong while getting the chats : " + err.message,
+    });
+  }
+};
+
+const sendMessage = async (req, res) => {
+  try {
+    const { id, receiver, content } = req.body;
+    const token = req.cookies.access_token;
+    const decoded = jwt.verify(token, process.env.SECRET);
+    const chat = await chatModel.findOneAndUpdate(
+      { _id: id },
+      {
+        $push: {
+          messages: {
+            receiver: receiver,
+            sender: decoded.id,
+            content: content,
+          },
+        },
+      }
+    );
+    return res.status(200).json({ message: "Messsage sent : ", chat: chat });
+  } catch (err) {
+    return res.status(400).json({
       message:
-        "Something went wrong while getting all the chats : " + err.message,
+        "Something went wrong while trying to send a message : " + err.message,
     });
   }
 };
 
 module.exports = {
   addChat,
-  getChats,
+  getChat,
+  sendMessage,
 };
