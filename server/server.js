@@ -59,8 +59,8 @@ io.on("connection", (socket) => {
     console.log("Joined chat : " + currentChat);
   });
 
-  socket.on("sendMessage", ({ current, message }) => {
-    socket.to(currentChat).emit("getMessage", { current, message });
+  socket.on("sendMessage", (state) => {
+    socket.to(currentChat).emit("getMessage", currentChat);
   });
 
   socket.on("Typing", (state) => {

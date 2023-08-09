@@ -32,7 +32,7 @@ function ChatPage() {
     scrollToBottom();
   }, [messages]);
   const sendMessage = async () => {
-    socket.emit("sendMessage", { chat, current, message });
+    socket.emit("sendMessage", true);
     const response = await axios({
       method: "post",
       url: "api/chat/sendMessage",
@@ -43,6 +43,15 @@ function ChatPage() {
       },
     });
     setMessage("");
+    const response2 = await axios({
+      method: "post",
+      url: "/api/chat/getChat",
+      data: {
+        id: chat,
+      },
+    });
+    setMessages(response2.data.chat.messages);
+    scrollToBottom();
   };
 
   const handleChatChange = async (chat, friend) => {
@@ -73,13 +82,18 @@ function ChatPage() {
   };
 
   useEffect(() => {
-    socket.on("getMessage", ({ current, message }) => {
-      console.log("here");
-      console.log(message);
+    socket.on("getMessage", async (currentChat) => {
+      const response = await axios({
+        method: "post",
+        url: "/api/chat/getChat",
+        data: {
+          id: currentChat,
+        },
+      });
+      setMessages(response.data.chat.messages);
     });
     socket.on("Loading", (state) => {
       if (state) {
-        console.log("Typing");
         setLoading(true);
       }
     });
