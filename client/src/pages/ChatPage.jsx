@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { logged } from "../context/LogContext";
 import axios from "axios";
 import UsersList from "../components/UsersList";
@@ -8,19 +8,29 @@ import ChatRoom from "../components/ChatRoom";
 import { request } from "../context/RequestContext";
 import { socket } from "../chat/socket";
 
-const sampleData = [];
-
 function ChatPage() {
   const requests = useContext(request);
   const data = useContext(logged);
   const [user, setUser] = useState({});
-  const [search, setSeearch] = useState("");
+  const [search, setSearch] = useState("");
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
   const [chat, setChat] = useState("");
   const [current, setCurrent] = useState("");
   const [loading, setLoading] = useState(false);
+  const messagesEndRef = useRef(null);
 
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [loading]);
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
   const sendMessage = async () => {
     socket.emit("sendMessage", { chat, current, message });
     const response = await axios({
@@ -76,20 +86,11 @@ function ChatPage() {
   }, [socket]);
 
   useEffect(() => {
-    if (sampleData.length === 0) {
-      const toRef = setTimeout(() => {
-        setLoading(true);
-        clearTimeout(toRef);
-      }, 1000);
-    }
-  }, [sampleData]);
-
-  useEffect(() => {
     if (loading) {
       const toRef = setTimeout(() => {
         setLoading(false);
         clearTimeout(toRef);
-      }, 4000);
+      }, 1500);
     }
   }, [loading]);
 
@@ -157,6 +158,7 @@ function ChatPage() {
   useEffect(() => {
     if (data.decoded) setUser(data.decoded);
   }, [data]);
+
   return (
     <div className="h-screen w-full bg-white">
       <div className="navbar bg-info shadow-2xl">
@@ -181,7 +183,7 @@ function ChatPage() {
             placeholder="Search for Users"
             className="input input-bordered input-primary bg-white w-full max-w-xs"
             onChange={(event) => {
-              setSeearch(event.target.value);
+              setSearch(event.target.value);
             }}
           />
           <button
@@ -262,12 +264,13 @@ function ChatPage() {
           <div className="h-5/6 overflow-auto bg-gray-200 rounded-xl">
             <ChatRoom messages={messages} />
             {loading ? (
-              <div className="chat chat-start">
+              <div className="chat chat-start" ref={messagesEndRef}>
                 <div className="chat-bubble bg-info text-white">
                   <span className="loading loading-dots loading-md"></span>
                 </div>
               </div>
             ) : null}
+            <div ref={messagesEndRef}></div>
           </div>
 
           <div className="w-full h-1/6 flex items-end bg-white">
