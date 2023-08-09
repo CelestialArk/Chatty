@@ -50,10 +50,21 @@ app.use("/api/chat", chatRoute);
 
 app.use("/api/request", requestRoute);
 
+let currentChat = 0;
+
 io.on("connection", (socket) => {
-  socket.on("getChat", (data) => {
-    socket.join(data);
-    socket.emit("gotChat", "Here is the chat : " + data);
+  socket.on("joinChat", (chat) => {
+    socket.join(chat);
+    currentChat = chat;
+    console.log("Joined chat : " + currentChat);
+  });
+
+  socket.on("sendMessage", ({ current, message }) => {
+    socket.to(currentChat).emit("getMessage", { current, message });
+  });
+
+  socket.on("Typing", (state) => {
+    if (state) socket.to(currentChat).emit("Loading", true);
   });
 });
 

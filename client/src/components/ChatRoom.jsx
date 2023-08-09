@@ -24,11 +24,7 @@ function ChatRoom({ messages }) {
       </div>
     )
   );
-  return (
-    <div className="h-5/6 overflow-auto bg-gray-200 rounded-xl">
-      {messageList}
-    </div>
-  );
+  return <div className="">{messageList}</div>;
 }
 
 export default ChatRoom;

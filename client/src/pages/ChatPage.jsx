@@ -8,17 +8,21 @@ import ChatRoom from "../components/ChatRoom";
 import { request } from "../context/RequestContext";
 import { socket } from "../chat/socket";
 
+const sampleData = [];
+
 function ChatPage() {
   const requests = useContext(request);
   const data = useContext(logged);
-  const [user, setUser] = useState();
+  const [user, setUser] = useState({});
   const [search, setSeearch] = useState("");
   const [messages, setMessages] = useState([]);
-  const [message, setMessage] = useState();
-  const [chat, setChat] = useState();
-  const [current, setCurrent] = useState();
+  const [message, setMessage] = useState("");
+  const [chat, setChat] = useState("");
+  const [current, setCurrent] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const sendMessage = async () => {
+    socket.emit("sendMessage", { chat, current, message });
     const response = await axios({
       method: "post",
       url: "api/chat/sendMessage",
@@ -28,11 +32,13 @@ function ChatPage() {
         receiver: current,
       },
     });
+    setMessage("");
   };
 
   const handleChatChange = async (chat, friend) => {
     setChat(chat);
     setCurrent(friend);
+    socket.emit("joinChat", chat);
     const response = await axios({
       method: "post",
       url: "/api/chat/getChat",
@@ -55,6 +61,37 @@ function ChatPage() {
 
     alert(response.data.message);
   };
+
+  useEffect(() => {
+    socket.on("getMessage", ({ current, message }) => {
+      console.log("here");
+      console.log(message);
+    });
+    socket.on("Loading", (state) => {
+      if (state) {
+        console.log("Typing");
+        setLoading(true);
+      }
+    });
+  }, [socket]);
+
+  useEffect(() => {
+    if (sampleData.length === 0) {
+      const toRef = setTimeout(() => {
+        setLoading(true);
+        clearTimeout(toRef);
+      }, 1000);
+    }
+  }, [sampleData]);
+
+  useEffect(() => {
+    if (loading) {
+      const toRef = setTimeout(() => {
+        setLoading(false);
+        clearTimeout(toRef);
+      }, 4000);
+    }
+  }, [loading]);
 
   const listItems = requests.map((item) => (
     <ul
@@ -222,12 +259,24 @@ function ChatPage() {
       <div className="w-full h-5/6 flex ">
         <UsersList changeChat={handleChatChange} />
         <div className="w-full h-full">
-          <ChatRoom messages={messages} />
+          <div className="h-5/6 overflow-auto bg-gray-200 rounded-xl">
+            <ChatRoom messages={messages} />
+            {loading ? (
+              <div className="chat chat-start">
+                <div className="chat-bubble bg-info text-white">
+                  <span className="loading loading-dots loading-md"></span>
+                </div>
+              </div>
+            ) : null}
+          </div>
+
           <div className="w-full h-1/6 flex items-end bg-white">
             <input
+              value={message}
               className="input input-primary w-full bg-white mx-3"
               onChange={(event) => {
                 setMessage(event.target.value);
+                socket.emit("Typing", true);
               }}
             />
             <button

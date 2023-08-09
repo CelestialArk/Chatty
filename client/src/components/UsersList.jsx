@@ -4,7 +4,6 @@ import { users } from "../context/UsersContext";
 function UsersList({ changeChat }) {
   const handleChange = (chat, friend) => {
     changeChat(chat, friend);
-    console.log("the chat : " + chat + " The friend : " + friend);
   };
 
   const list = useContext(users);
