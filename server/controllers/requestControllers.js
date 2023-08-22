@@ -6,11 +6,11 @@ const chatModel = require("../models/chatModel");
 
 const sendRequest = async (req, res) => {
   try {
-    const { receiverName } = req.body;
+    const { username } = req.body;
     const token = req.cookies.access_token;
     if (!token) return res.status(404).json({ message: "Not connected." });
     const decoded = jwt.verify(token, process.env.SECRET);
-    const receiver = await userModel.findOne({ username: receiverName });
+    const receiver = await userModel.findOne({ username: username });
     if (!receiver)
       return res.status(200).json({ message: "No such user exists." });
     const chat = await chatModel

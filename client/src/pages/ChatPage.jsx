@@ -1,4 +1,10 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, {
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+  createContext,
+} from "react";
 import { logged } from "../context/LogContext";
 import axios from "axios";
 import UsersList from "../components/UsersList";
@@ -7,6 +13,14 @@ import display from "./assets/Display.png";
 import ChatRoom from "../components/ChatRoom";
 import { request } from "../context/RequestContext";
 import { socket } from "../chat/socket";
+import { useNavigate } from "react-router-dom";
+
+export const searchList = createContext();
+
+export function SearchResult({ children }) {
+  const [result, setResult] = useState("");
+  return <searchList.Provider value={result}>{children}</searchList.Provider>;
+}
 
 function ChatPage() {
   const requests = useContext(request);
@@ -31,27 +45,34 @@ function ChatPage() {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
   const sendMessage = async () => {
     socket.emit("sendMessage", true);
-    const response = await axios({
-      method: "post",
-      url: "api/chat/sendMessage",
-      data: {
-        id: chat,
-        content: message,
-        receiver: current,
-      },
-    });
-    setMessage("");
-    const response2 = await axios({
-      method: "post",
-      url: "/api/chat/getChat",
-      data: {
-        id: chat,
-      },
-    });
-    setMessages(response2.data.chat.messages);
-    scrollToBottom();
+    if (message !== "") {
+      await axios({
+        method: "post",
+        url: "api/chat/sendMessage",
+        data: {
+          id: chat,
+          content: message,
+          receiver: current,
+        },
+      });
+      setMessage("");
+      const response = await axios({
+        method: "post",
+        url: "/api/chat/getChat",
+        data: {
+          id: chat,
+        },
+      });
+      setMessages(response.data.chat.messages);
+      scrollToBottom();
+    }
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") sendMessage();
   };
 
   const handleChatChange = async (chat, friend) => {
@@ -68,17 +89,18 @@ function ChatPage() {
     setMessages(response.data.chat.messages);
   };
 
-  const searchUsers = async () => {
+  const sendRequest = async () => {
     if (search === "") return alert("Please enter the Username of the user");
     const response = await axios({
       method: "post",
       url: "/api/request/send",
       data: {
-        receiverName: search,
+        username: search,
       },
     });
 
     alert(response.data.message);
+    socket.emit("getRequests", true);
   };
 
   useEffect(() => {
@@ -157,6 +179,7 @@ function ChatPage() {
       },
     });
     alert(response.data.message);
+    socket.emit("replied", true);
     window.location.reload(false);
   };
 
@@ -194,7 +217,7 @@ function ChatPage() {
         <div className="flex-none">
           <input
             type="text"
-            placeholder="Search for Users"
+            placeholder="Send request to user"
             className="input input-bordered input-primary bg-white w-full max-w-xs"
             onChange={(event) => {
               setSearch(event.target.value);
@@ -203,7 +226,7 @@ function ChatPage() {
           <button
             className="btn btn-ghost btn-circle"
             onClick={() => {
-              searchUsers();
+              sendRequest();
             }}
           >
             <svg
@@ -290,6 +313,7 @@ function ChatPage() {
           <div className="w-full h-1/6 flex items-end bg-white">
             <input
               value={message}
+              onKeyDown={handleKeyDown}
               className="input input-primary w-full bg-white mx-3"
               onChange={(event) => {
                 setMessage(event.target.value);
@@ -302,7 +326,17 @@ function ChatPage() {
                 sendMessage();
               }}
             >
-              Send
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                className="bi bi-arrow-right-circle-fill"
+                viewBox="0 0 16 16"
+              >
+                {" "}
+                <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z" />{" "}
+              </svg>
             </button>
           </div>
         </div>

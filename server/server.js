@@ -4,24 +4,17 @@ const cookieParser = require("cookie-parser");
 
 const http = require("http");
 
-const { Server } = require("socket.io");
-
 const dotenv = require("dotenv").config();
 
 const cors = require("cors");
 
 const mongoose = require("mongoose");
 
+const { Server } = require("socket.io");
+
 const app = express();
 
 const server = http.createServer(app);
-
-const io = new Server(server, {
-  cors: {
-    origin: process.env.origin,
-    methods: ["GET", "POST"],
-  },
-});
 
 const userRoute = require("./routes/userRoute");
 
@@ -50,21 +43,35 @@ app.use("/api/chat", chatRoute);
 
 app.use("/api/request", requestRoute);
 
+const io = new Server(server, {
+  cors: {
+    origin: process.env.origin,
+    methods: ["GET", "POST"],
+  },
+});
+
 let currentChat = 0;
 
 io.on("connection", (socket) => {
   socket.on("joinChat", (chat) => {
     socket.join(chat);
     currentChat = chat;
-    console.log("Joined chat : " + currentChat);
   });
 
   socket.on("sendMessage", (state) => {
     socket.to(currentChat).emit("getMessage", currentChat);
   });
 
+  socket.on("getRequests", (state) => {
+    socket.broadcast.emit("gotRequest", true);
+  });
+
   socket.on("Typing", (state) => {
     if (state) socket.to(currentChat).emit("Loading", true);
+  });
+
+  socket.on("replied", (state) => {
+    socket.broadcast.emit("check", true);
   });
 });
 

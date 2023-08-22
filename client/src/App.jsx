@@ -4,10 +4,11 @@ import RegisterPage from "./pages/RegisterPage";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import { logged } from "./context/LogContext";
-import ChatPage from "./pages/ChatPage";
+import ChatPage, { SearchResult } from "./pages/ChatPage";
 import { useContext, useEffect } from "react";
 import UsersContext from "./context/UsersContext";
 import RequestContext from "./context/RequestContext";
+import SearchPage from "./pages/SearchPage";
 
 function App() {
   const isLogged = useContext(logged);
@@ -24,6 +25,14 @@ function App() {
                     <ChatPage />
                   </RequestContext>
                 </UsersContext>
+              }
+            />
+            <Route
+              path="/search"
+              element={
+                <SearchResult>
+                  <SearchPage />
+                </SearchResult>
               }
             />
           </Routes>

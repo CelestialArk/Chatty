@@ -1,9 +1,11 @@
 import axios from "axios";
 import { createContext, useEffect, useState } from "react";
+import { socket } from "../chat/socket";
 
 export const request = createContext();
 
 const RequestContext = ({ children }) => {
+  const [update, setUpdate] = useState(false);
   const [requests, setRequests] = useState([]);
   useEffect(() => {
     const getRequests = async () => {
@@ -15,7 +17,14 @@ const RequestContext = ({ children }) => {
       setRequests(response.data.requests);
     };
     getRequests();
-  }, []);
+  }, [update]);
+
+  useEffect(() => {
+    socket.on("gotRequest", (state) => {
+      console.log("yes");
+      setUpdate(!update);
+    });
+  }, [socket]);
   return <request.Provider value={requests}>{children}</request.Provider>;
 };
 
