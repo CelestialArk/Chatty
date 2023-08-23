@@ -1,5 +1,5 @@
 import io from "socket.io-client";
 
-const URL = "http://localhost:7789";
+const URL = "https://chatty-tau-three.vercel.app";
 
 export const socket = io.connect(URL);
