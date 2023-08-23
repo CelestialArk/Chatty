@@ -22,6 +22,12 @@ const chatRoute = require("./routes/chatRoute");
 
 const requestRoute = require("./routes/requestRoute");
 
+app.use(
+  cors({
+    origin: "*",
+  })
+);
+
 app.use(express.json());
 
 app.use(cookieParser());
