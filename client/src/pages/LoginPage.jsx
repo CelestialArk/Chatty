@@ -10,7 +10,7 @@ function LoginPage() {
   const login = async () => {
     const response = await axios({
       method: "post",
-      url: "https://chatty-server-2j1zhoqkw-owlden.vercel.app/api/user/signin",
+      url: "https://chatty-server-x4l12hdpd-owlden.vercel.app/api/user/signin",
       data: {
         email: email,
         password: password,
