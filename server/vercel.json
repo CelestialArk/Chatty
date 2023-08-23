@@ -7,7 +7,7 @@
         { "key": "Access-Control-Allow-Credentials", "value": "true" },
         {
           "key": "Access-Control-Allow-Origin",
-          "value": "https://chatty-client-seven.vercel.app"
+          "value": "https://chatty-client-5s0oy3ojw-owlden.vercel.app"
         },
         {
           "key": "Access-Control-Allow-Methods",
