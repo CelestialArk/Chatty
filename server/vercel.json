@@ -11,5 +11,12 @@
       "src": "/(.*)",
       "dest": "/"
     }
+  ],
+  "rewrites": [
+    {
+      "source": "/api/:path(.*)",
+      "destination": "https://chatty-tau-three.vercel.app"
+    },
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
