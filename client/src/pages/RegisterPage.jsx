@@ -18,7 +18,7 @@ function RegisterPage() {
     }
     const response = await axios({
       method: "post",
-      url: "/api/user/signup",
+      url: "https://chatty-server-git-main-owlden.vercel.app/api/user/signup",
       data: {
         firstname: firstname,
         lastname: lastname,

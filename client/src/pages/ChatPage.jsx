@@ -51,7 +51,7 @@ function ChatPage() {
     if (message !== "") {
       await axios({
         method: "post",
-        url: "api/chat/sendMessage",
+        url: "https://chatty-server-git-main-owlden.vercel.app/api/chat/sendMessage",
         data: {
           id: chat,
           content: message,
@@ -61,7 +61,7 @@ function ChatPage() {
       setMessage("");
       const response = await axios({
         method: "post",
-        url: "/api/chat/getChat",
+        url: "https://chatty-server-git-main-owlden.vercel.app/api/chat/getChat",
         data: {
           id: chat,
         },
@@ -81,7 +81,7 @@ function ChatPage() {
     socket.emit("joinChat", chat);
     const response = await axios({
       method: "post",
-      url: "/api/chat/getChat",
+      url: "https://chatty-server-git-main-owlden.vercel.app/api/chat/getChat",
       data: {
         id: chat,
       },
@@ -93,7 +93,7 @@ function ChatPage() {
     if (search === "") return alert("Please enter the Username of the user");
     const response = await axios({
       method: "post",
-      url: "/api/request/send",
+      url: "https://chatty-server-git-main-owlden.vercel.app/api/request/send",
       data: {
         username: search,
       },
@@ -107,7 +107,7 @@ function ChatPage() {
     socket.on("getMessage", async (currentChat) => {
       const response = await axios({
         method: "post",
-        url: "/api/chat/getChat",
+        url: "https://chatty-server-git-main-owlden.vercel.app/api/chat/getChat",
         data: {
           id: currentChat,
         },

@@ -11,7 +11,7 @@ const RequestContext = ({ children }) => {
     const getRequests = async () => {
       const response = await axios({
         method: "get",
-        url: "/api/request/getAll",
+        url: "https://chatty-server-git-main-owlden.vercel.app/api/request/getAll",
         withCredentials: true,
       });
       setRequests(response.data.requests);
