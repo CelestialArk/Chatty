@@ -28,7 +28,7 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: process.env.ORIGIN,
+    origin: "https://chatty-client-1c5e91l9y-owlden.vercel.app",
   })
 );
 
