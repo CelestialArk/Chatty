@@ -9,7 +9,7 @@ import { logged } from "../context/LogContext";
 import axios from "axios";
 import UsersList from "../components/UsersList";
 import logo from "./assets/Logo.png";
-import display from "./assets/Display.png";
+import display from "./assets/display.png";
 import ChatRoom from "../components/ChatRoom";
 import { request } from "../context/RequestContext";
 import { socket } from "../chat/socket";

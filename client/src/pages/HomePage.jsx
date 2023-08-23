@@ -6,7 +6,7 @@ function HomePage() {
   return (
     <div className="flex justify-content-center h-screen bg-gradient-to-r from-primary to-info">
       <div className="m-auto">
-        <div className="card lg:card-side bg-base-200 shadow-xl bg-white grid-cols-2">
+        <div className="card lg:card-side shadow-xl bg-white grid-cols-2">
           <div className="flex p-4 bg-gray-100 rounded-xl">
             <div className="m-auto">
               <img src={Logo} className="place-self-center" />
