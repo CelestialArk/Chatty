@@ -13,7 +13,7 @@ export default function LogContext({ children }) {
     const check = async () => {
       const response = await axios({
         method: "get",
-        url: "https://chatty-server-git-main-owlden.vercel.app/api/user/check",
+        url: "/api/user/check",
         withCredentials: true,
       });
       setIsLogged(response.data);

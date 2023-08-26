@@ -1,5 +1,5 @@
 import io from "socket.io-client";
 
-const URL = "https://chatty-server-git-main-owlden.vercel.app";
+const URL = "http://localhost:7789";
 
 export const socket = io.connect(URL);
