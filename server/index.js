@@ -6,7 +6,7 @@ const http = require("http");
 
 const dotenv = require("dotenv").config();
 
-const cors = require("cors")
+const cors = require("cors");
 
 const mongoose = require("mongoose");
 
@@ -23,7 +23,7 @@ const chatRoute = require("./routes/chatRoute");
 const requestRoute = require("./routes/requestRoute");
 
 const corsOptions = {
-  origin: process.env.ORIGIN,
+  origin: "https://chatty-client-lts9uhnnd-owlden.vercel.app",
   credentials: true,
 };
 
