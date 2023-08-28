@@ -23,7 +23,7 @@ const chatRoute = require("./routes/chatRoute");
 const requestRoute = require("./routes/requestRoute");
 
 const corsOptions = {
-  origin: process.env.ORIGIN,
+  origin: "https://chatty-client-rho.vercel.app",
   credentials: true,
 };
 
