@@ -1,5 +1,5 @@
 import io from "socket.io-client";
 
-const URL = "http://localhost:7789";
+const URL = import.meta.env.VITE_SERVER_URL;
 
 export const socket = io.connect(URL);

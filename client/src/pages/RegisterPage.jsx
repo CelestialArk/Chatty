@@ -12,13 +12,19 @@ function RegisterPage() {
   const [username, setUsername] = useState();
   const [verifyPassword, setVerifyPassword] = useState();
 
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      register();
+    }
+  };
+
   const register = async () => {
     if (password !== verifyPassword) {
       return alert("Passwords do not match");
     }
     const response = await axios({
       method: "post",
-      url: "/api/user/signup",
+      url: import.meta.env.VITE_SERVER_URL + "/api/user/signup",
       data: {
         firstname: firstname,
         lastname: lastname,
@@ -128,6 +134,7 @@ function RegisterPage() {
                   </label>
                   <input
                     type="password"
+                    onKeyDown={handleKeyDown}
                     className="input input-info bg-white placeholder:font-rubik-light"
                     placeholder="Verify Password"
                     onChange={(event) => {

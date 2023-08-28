@@ -51,17 +51,18 @@ function ChatPage() {
     if (message !== "") {
       await axios({
         method: "post",
-        url: "/api/chat/sendMessage",
+        url: import.meta.env.VITE_SERVER_URL + "/api/chat/sendMessage",
         data: {
           id: chat,
           content: message,
           receiver: current,
         },
+        withCredentials: true,
       });
       setMessage("");
       const response = await axios({
         method: "post",
-        url: "/api/chat/getChat",
+        url: import.meta.env.VITE_SERVER_URL + "/api/chat/getChat",
         data: {
           id: chat,
         },
@@ -81,7 +82,7 @@ function ChatPage() {
     socket.emit("joinChat", chat);
     const response = await axios({
       method: "post",
-      url: "/api/chat/getChat",
+      url: import.meta.env.VITE_SERVER_URL + "/api/chat/getChat",
       data: {
         id: chat,
       },
@@ -89,14 +90,21 @@ function ChatPage() {
     setMessages(response.data.chat.messages);
   };
 
+  const handleRequestKey = (event) => {
+    if (event.key === "Enter") {
+      sendRequest();
+    }
+  };
+
   const sendRequest = async () => {
     if (search === "") return alert("Please enter the Username of the user");
     const response = await axios({
       method: "post",
-      url: "/api/request/send",
+      url: import.meta.env.VITE_SERVER_URL + "/api/request/send",
       data: {
         username: search,
       },
+      withCredentials: true,
     });
 
     alert(response.data.message);
@@ -107,7 +115,7 @@ function ChatPage() {
     socket.on("getMessage", async (currentChat) => {
       const response = await axios({
         method: "post",
-        url: "/api/chat/getChat",
+        url: import.meta.env.VITE_SERVER_URL + "/api/chat/getChat",
         data: {
           id: currentChat,
         },
@@ -172,11 +180,12 @@ function ChatPage() {
   const replyRequest = async (reply, id) => {
     const response = await axios({
       method: "post",
-      url: "/api/request/reply",
+      url: import.meta.env.VITE_SERVER_URL + "/api/request/reply",
       data: {
         id: id,
         reply: reply,
       },
+      withCredentials: true,
     });
     alert(response.data.message);
     socket.emit("replied", true);
@@ -186,10 +195,12 @@ function ChatPage() {
   const logout = async () => {
     const response = await axios({
       method: "get",
-      url: "/api/user/checkout",
+      url: import.meta.env.VITE_SERVER_URL + "/api/user/checkout",
+      withCredentials: true,
     });
     alert(response.data.message);
     window.location.reload(false);
+    console.log("yes you pushed me ");
   };
 
   useEffect(() => {
@@ -217,7 +228,8 @@ function ChatPage() {
         <div className="flex-none">
           <input
             type="text"
-            placeholder="Send request to user"
+            onKeyDown={handleRequestKey}
+            placeholder="Send friendship request."
             className="input input-bordered input-primary bg-white w-full max-w-xs"
             onChange={(event) => {
               setSearch(event.target.value);
@@ -280,7 +292,14 @@ function ChatPage() {
               className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-white text-base-200 rounded-box w-52"
             >
               <li>
-                <a className="justify-between">Profile</a>
+                <a
+                  className="justify-between"
+                  onClick={() => {
+                    console.log("not yet defined");
+                  }}
+                >
+                  Profile
+                </a>
               </li>
               <li>
                 <a

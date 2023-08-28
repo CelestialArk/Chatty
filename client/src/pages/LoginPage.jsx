@@ -2,7 +2,6 @@ import { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-
 function LoginPage() {
   const navigate = useNavigate();
   const [email, setEmail] = useState();
@@ -10,16 +9,23 @@ function LoginPage() {
   const login = async () => {
     const response = await axios({
       method: "post",
-      url: "/api/user/signin",
+      url: import.meta.env.VITE_SERVER_URL + "/api/user/signin",
       data: {
         email: email,
         password: password,
       },
+      withCredentials: true,
     });
     alert(response.data.message);
     if (response.data.state) {
       navigate("/");
       window.location.reload(false);
+    }
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      login();
     }
   };
   return (
@@ -49,6 +55,7 @@ function LoginPage() {
                 </span>
               </label>
               <input
+                onKeyDown={handleKeyDown}
                 onChange={(event) => {
                   setPassword(event.target.value);
                 }}

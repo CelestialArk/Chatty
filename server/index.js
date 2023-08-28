@@ -22,11 +22,12 @@ const chatRoute = require("./routes/chatRoute");
 
 const requestRoute = require("./routes/requestRoute");
 
-app.use(
-  cors({
-    origin: "*",
-  })
-);
+const corsOptions = {
+  origin: process.env.ORIGIN,
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 
 app.use(express.json());
 
@@ -45,7 +46,7 @@ app.use("/api/request", requestRoute);
 
 const io = new Server(server, {
   cors: {
-    origin: process.env.origin,
+    origin: process.env.ORIGIN,
     methods: ["GET", "POST"],
   },
 });
