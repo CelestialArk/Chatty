@@ -6,7 +6,7 @@ const http = require("http");
 
 const dotenv = require("dotenv").config();
 
-const cors = require("cors");
+const cors = require("cors")
 
 const mongoose = require("mongoose");
 
