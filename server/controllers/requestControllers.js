@@ -7,7 +7,7 @@ const chatModel = require("../models/chatModel");
 const sendRequest = async (req, res) => {
   try {
     const { username } = req.body;
-    const token = req.cookies.access_token;
+    const token = req.cookies.chatty_token;
     if (!token) return res.status(404).json({ message: "Not connected." });
     const decoded = jwt.verify(token, process.env.SECRET);
     const receiver = await userModel.findOne({ username: username });
@@ -92,7 +92,7 @@ const replyRequest = async (req, res) => {
 };
 
 const getRequests = async (req, res) => {
-  const token = req.cookies.access_token;
+  const token = req.cookies.chatty_token;
   if (!token) return res.status(404).json({ message: "not connected." });
   const decoded = jwt.verify(token, process.env.SECRET);
   const requests = await requestModel

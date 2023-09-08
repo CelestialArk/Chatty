@@ -63,7 +63,7 @@ const getChat = async (req, res) => {
 const sendMessage = async (req, res) => {
   try {
     const { id, receiver, content } = req.body;
-    const token = req.cookies.access_token;
+    const token = req.cookies.chatty_token;
     const decoded = jwt.verify(token, process.env.SECRET);
     const chat = await chatModel.findOneAndUpdate(
       { _id: id },

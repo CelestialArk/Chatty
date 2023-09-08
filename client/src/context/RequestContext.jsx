@@ -11,7 +11,7 @@ const RequestContext = ({ children }) => {
     const getRequests = async () => {
       const response = await axios({
         method: "get",
-        url: import.meta.env.VITE_SERVER_URL + "/api/request/getAll",
+        url: "/api/request/getAll",
         withCredentials: true,
       });
       setRequests(response.data.requests);

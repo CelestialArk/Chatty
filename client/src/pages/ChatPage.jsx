@@ -51,7 +51,7 @@ function ChatPage() {
     if (message !== "") {
       await axios({
         method: "post",
-        url: import.meta.env.VITE_SERVER_URL + "/api/chat/sendMessage",
+        url: "/api/chat/sendMessage",
         data: {
           id: chat,
           content: message,
@@ -62,7 +62,7 @@ function ChatPage() {
       setMessage("");
       const response = await axios({
         method: "post",
-        url: import.meta.env.VITE_SERVER_URL + "/api/chat/getChat",
+        url: "/api/chat/getChat",
         data: {
           id: chat,
         },
@@ -82,7 +82,7 @@ function ChatPage() {
     socket.emit("joinChat", chat);
     const response = await axios({
       method: "post",
-      url: import.meta.env.VITE_SERVER_URL + "/api/chat/getChat",
+      url: "/api/chat/getChat",
       data: {
         id: chat,
       },
@@ -100,7 +100,7 @@ function ChatPage() {
     if (search === "") return alert("Please enter the Username of the user");
     const response = await axios({
       method: "post",
-      url: import.meta.env.VITE_SERVER_URL + "/api/request/send",
+      url: "/api/request/send",
       data: {
         username: search,
       },
@@ -115,7 +115,7 @@ function ChatPage() {
     socket.on("getMessage", async (currentChat) => {
       const response = await axios({
         method: "post",
-        url: import.meta.env.VITE_SERVER_URL + "/api/chat/getChat",
+        url: "/api/chat/getChat",
         data: {
           id: currentChat,
         },
@@ -180,7 +180,7 @@ function ChatPage() {
   const replyRequest = async (reply, id) => {
     const response = await axios({
       method: "post",
-      url: import.meta.env.VITE_SERVER_URL + "/api/request/reply",
+      url: "/api/request/reply",
       data: {
         id: id,
         reply: reply,
@@ -195,7 +195,7 @@ function ChatPage() {
   const logout = async () => {
     const response = await axios({
       method: "get",
-      url: import.meta.env.VITE_SERVER_URL + "/api/user/checkout",
+      url: "/api/user/checkout",
       withCredentials: true,
     });
     alert(response.data.message);

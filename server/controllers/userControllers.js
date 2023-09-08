@@ -61,7 +61,7 @@ const userSignup = (req, res) => {
         process.env.SECRET
       );
 
-      return res.cookie("access_token", token).status(200).json({
+      return res.cookie("chatty_token", token).status(200).json({
         message: "User created successfully.",
         user: user,
         state: true,
@@ -106,7 +106,7 @@ const userSignin = async (req, res) => {
       );
 
       return res
-        .cookie("access_token", token)
+        .cookie("chatty_token", token)
         .status(200)
         .json({ message: "Signed in successfully.", state: true });
     });
@@ -123,11 +123,11 @@ const userSignin = async (req, res) => {
 
 const userCheck = (req, res) => {
   try {
-    if (!req.cookies.access_token)
+    if (!req.cookies.chatty_token)
       return res
         .status(200)
         .json({ message: "User not connected", state: false });
-    const token = req.cookies.access_token;
+    const token = req.cookies.chatty_token;
     const decoded = jwt.verify(token, process.env.SECRET);
     return res.status(200).json({
       message: "User connected using cookies",
@@ -143,9 +143,9 @@ const userCheck = (req, res) => {
 
 const userCheckout = async (req, res) => {
   try {
-    if (req.cookies.access_token) {
+    if (req.cookies.chatty_token) {
       return res
-        .clearCookie("access_token")
+        .clearCookie("chatty_token")
         .status(200)
         .json({ message: "Disconnected" });
     }
@@ -158,9 +158,9 @@ const userCheckout = async (req, res) => {
 
 const getUsers = async (req, res) => {
   try {
-    if (!req.cookies.access_token)
+    if (!req.cookies.chatty_token)
       return res.status(404).json({ message: "Not connected." });
-    const token = req.cookies.access_token;
+    const token = req.cookies.chatty_token;
     const decoded = jwt.verify(token, process.env.SECRET);
     const user = await userModel
       .findById(decoded.id)

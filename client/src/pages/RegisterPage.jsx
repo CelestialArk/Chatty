@@ -24,7 +24,7 @@ function RegisterPage() {
     }
     const response = await axios({
       method: "post",
-      url: import.meta.env.VITE_SERVER_URL + "/api/user/signup",
+      url: "/api/user/signup",
       data: {
         firstname: firstname,
         lastname: lastname,

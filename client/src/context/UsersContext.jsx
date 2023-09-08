@@ -8,7 +8,7 @@ export default function UsersContext({ children }) {
   const getList = async () => {
     const response = await axios({
       method: "get",
-      url: import.meta.env.VITE_SERVER_URL + "/api/user/getAll",
+      url: "/api/user/getAll",
       withCredentials: true,
     });
     setList(response.data.users);

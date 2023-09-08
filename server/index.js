@@ -6,8 +6,6 @@ const http = require("http");
 
 const dotenv = require("dotenv").config();
 
-const cors = require("cors");
-
 const mongoose = require("mongoose");
 
 const { Server } = require("socket.io");
@@ -21,13 +19,6 @@ const userRoute = require("./routes/userRoute");
 const chatRoute = require("./routes/chatRoute");
 
 const requestRoute = require("./routes/requestRoute");
-
-const corsOptions = {
-  origin: "https://chatty-client-rho.vercel.app",
-  credentials: true,
-};
-
-app.use(cors(corsOptions));
 
 app.use(express.json());
 
