@@ -20,9 +20,18 @@ const chatRoute = require("./routes/chatRoute");
 
 const requestRoute = require("./routes/requestRoute");
 
+const cors = require("cors");
+
 app.use(express.json());
 
 app.use(cookieParser());
+
+app.use(
+  cors({
+    origin: process.env.ORIGIN,
+    credentials: true,
+  })
+);
 
 app.use((req, res, next) => {
   console.log(req.method, req.path);
@@ -37,8 +46,7 @@ app.use("/api/request", requestRoute);
 
 const io = new Server(server, {
   cors: {
-    origin: process.env.ORIGIN,
-    methods: ["GET", "POST"],
+    origin: "*",
   },
 });
 

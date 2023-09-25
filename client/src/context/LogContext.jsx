@@ -13,7 +13,7 @@ export default function LogContext({ children }) {
     const check = async () => {
       const response = await axios({
         method: "get",
-        url: "/api/user/check",
+        url: import.meta.env.VITE_ORIGIN + "/api/user/check",
         withCredentials: true,
       });
       setIsLogged(response.data);

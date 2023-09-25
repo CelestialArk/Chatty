@@ -51,7 +51,7 @@ function ChatPage() {
     if (message !== "") {
       await axios({
         method: "post",
-        url: "/api/chat/sendMessage",
+        url: import.meta.env.VITE_ORIGIN + "/api/chat/sendMessage",
         data: {
           id: chat,
           content: message,
@@ -62,7 +62,7 @@ function ChatPage() {
       setMessage("");
       const response = await axios({
         method: "post",
-        url: "/api/chat/getChat",
+        url: import.meta.env.VITE_ORIGIN + "/api/chat/getChat",
         data: {
           id: chat,
         },
@@ -82,7 +82,7 @@ function ChatPage() {
     socket.emit("joinChat", chat);
     const response = await axios({
       method: "post",
-      url: "/api/chat/getChat",
+      url: import.meta.env.VITE_ORIGIN + "/api/chat/getChat",
       data: {
         id: chat,
       },
@@ -100,7 +100,7 @@ function ChatPage() {
     if (search === "") return alert("Please enter the Username of the user");
     const response = await axios({
       method: "post",
-      url: "/api/request/send",
+      url: import.meta.env.VITE_ORIGIN + "/api/request/send",
       data: {
         username: search,
       },
@@ -115,7 +115,7 @@ function ChatPage() {
     socket.on("getMessage", async (currentChat) => {
       const response = await axios({
         method: "post",
-        url: "/api/chat/getChat",
+        url: import.meta.env.VITE_ORIGIN + "/api/chat/getChat",
         data: {
           id: currentChat,
         },
@@ -180,7 +180,7 @@ function ChatPage() {
   const replyRequest = async (reply, id) => {
     const response = await axios({
       method: "post",
-      url: "/api/request/reply",
+      url: import.meta.env.VITE_ORIGIN + "/api/request/reply",
       data: {
         id: id,
         reply: reply,
@@ -195,7 +195,7 @@ function ChatPage() {
   const logout = async () => {
     const response = await axios({
       method: "get",
-      url: "/api/user/checkout",
+      url: import.meta.env.VITE_ORIGIN + "/api/user/checkout",
       withCredentials: true,
     });
     alert(response.data.message);

@@ -9,7 +9,7 @@ function LoginPage() {
   const login = async () => {
     const response = await axios({
       method: "post",
-      url: "/api/user/signin",
+      url: import.meta.env.VITE_ORIGIN + "/api/user/signin",
       data: {
         email: email,
         password: password,
